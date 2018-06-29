@@ -56,27 +56,6 @@ public class MainActivity extends AppCompatActivity implements IResultView {
             Toast.makeText(context, "No Internet Connection!", Toast.LENGTH_SHORT).show();
         }
 
-
-        btnSyn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-try{
-                connectionDetector = new ConnectionDetector(context);
-                isinternetConnection = connectionDetector.isInternetOn();
-                if (isinternetConnection) {
-                    responseResultList.clear();
-                    callApi();
-
-                } else {
-                    Toast.makeText(context, "No Internet Connection!", Toast.LENGTH_SHORT).show();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            }
-        });
-
-
     }
 
     private void callApi() {
