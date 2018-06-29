@@ -36,7 +36,7 @@ public class AuthenticateImpl implements INetworkResult {
 
 
     @SuppressWarnings("unchecked")
-    public void callLoginAPI() {
+    public void callAPI() {
 
         Call authenticateResponseCall = endPointsAPI.getUserList();
         authenticateResponseCall.enqueue(networkHandler.EnqueueRequest(NetworkConstants.RESPONSE_TYPE.RETRIEVE_TYPE));

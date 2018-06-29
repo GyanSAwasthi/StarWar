@@ -9,19 +9,18 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.TimeZone;
+
 
 
 import in.penzebra.gyan.com.starwar.R;
 import in.penzebra.gyan.com.starwar.interfacemvp.IResultView;
 import in.penzebra.gyan.com.starwar.model.ResponseResult;
 import in.penzebra.gyan.com.starwar.presenter.AuthenticateImpl;
+import in.penzebra.gyan.com.starwar.utillity.ConnectionDetector;
 import in.penzebra.gyan.com.starwar.utillity.RecyclerTouchListener;
 import in.penzebra.gyan.com.starwar.view.adapter.CustomAdapter;
 
@@ -31,14 +30,15 @@ public class MainActivity extends AppCompatActivity implements IResultView {
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView recyclerView;
     private static ArrayList<ResponseResult.Result> responseResultList;
-    static View.OnClickListener myOnClickListener;
-    private static ArrayList<Integer> removedItems;
     private ProgressDialog dialog;
+    Boolean isinternetConnection = false;
+    ConnectionDetector connectionDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Button btnSyn = (Button) findViewById(R.id.btnsyn);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         dialog = new ProgressDialog(this);
         recyclerView.setHasFixedSize(true);
@@ -47,14 +47,40 @@ public class MainActivity extends AppCompatActivity implements IResultView {
 
         recyclerView.setLayoutManager(layoutManager);
         context = this;
-        callApi();
+        connectionDetector = new ConnectionDetector(context);
+        isinternetConnection = connectionDetector.isInternetOn();
+        if (isinternetConnection) {
+            responseResultList.clear();
+            callApi();
+
+        }else{
+            Toast.makeText(context, "No Internet Connection!", Toast.LENGTH_SHORT).show();
+        }
+
+
+        btnSyn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                connectionDetector = new ConnectionDetector(context);
+                isinternetConnection = connectionDetector.isInternetOn();
+                if (isinternetConnection) {
+                    responseResultList.clear();
+                    callApi();
+
+                }else{
+                    Toast.makeText(context, "No Internet Connection!", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
 
 
     }
 
     private void callApi() {
         AuthenticateImpl authenticateImpl = new AuthenticateImpl(context, this);
-        authenticateImpl.callLoginAPI();
+        authenticateImpl.callAPI();
         dialog.setMessage("Loading, please wait.");
         dialog.show();
     }
@@ -62,22 +88,27 @@ public class MainActivity extends AppCompatActivity implements IResultView {
 
     @Override
     public void showResult(Object listDO) {
+        final int count=0;
         responseResultList = ((ResponseResult) listDO).getResults();
         dialog.dismiss();
         CustomAdapter adapter = new CustomAdapter(this, ((ResponseResult) listDO).getResults());
         recyclerView.setAdapter(adapter);
 
 
+
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                Intent intent = new Intent(MainActivity.this, UserDetailActivity.class);
-                intent.putExtra("name", responseResultList.get(position).getName());
-                intent.putExtra("height", responseResultList.get(position).getHeight());
-                intent.putExtra("mass", responseResultList.get(position).getMass());
-                intent.putExtra("dateNtime", responseResultList.get(position).getCreated());
-                startActivity(intent);
+                if(count==0) {
+                    Intent intent = new Intent(MainActivity.this, UserDetailActivity.class);
+                    intent.putExtra("name", responseResultList.get(position).getName());
+                    intent.putExtra("height", responseResultList.get(position).getHeight());
+                    intent.putExtra("mass", responseResultList.get(position).getMass());
+                    intent.putExtra("dateNtime", responseResultList.get(position).getCreated());
 
+
+                    startActivity(intent);
+                }
 
             }
 

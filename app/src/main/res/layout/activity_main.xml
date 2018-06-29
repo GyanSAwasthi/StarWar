@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#222222"
     >
 
     <Toolbar
@@ -23,6 +22,7 @@
             android:layout_gravity="center_horizontal"
             android:textColor="#FFFFFF"/>
         <Button
+            android:id="@+id/btnsyn"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@drawable/ic_sync_black_24dp"

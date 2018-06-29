@@ -64,7 +64,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Height :"
+                android:text="Height (meters) :"
                 android:textSize="18dp"
 
                 android:textColor="#DDBB00" />
@@ -89,7 +89,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mass :"
+                android:text="Mass (k.g) :"
                 android:textSize="18dp"
 
                 android:textColor="#DDBB00" />
