@@ -14,7 +14,7 @@ public class NetworkClient {
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient() {
-
+try{
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -31,16 +31,21 @@ public class NetworkClient {
         httpClient.connectTimeout(timeOutTime, TimeUnit.MILLISECONDS);
         httpClient.readTimeout(timeOutTime, TimeUnit.MILLISECONDS);
         httpClient.addInterceptor(logging);
+    if (retrofit == null) {
+        retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
+                .build();
 
-        if (retrofit == null) {
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .client(httpClient.build())
-                    .build();
+    }
 
-        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
         return retrofit;
+
     }
 
 

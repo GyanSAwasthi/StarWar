@@ -50,10 +50,9 @@ public class MainActivity extends AppCompatActivity implements IResultView {
         connectionDetector = new ConnectionDetector(context);
         isinternetConnection = connectionDetector.isInternetOn();
         if (isinternetConnection) {
-            responseResultList.clear();
             callApi();
 
-        }else{
+        } else {
             Toast.makeText(context, "No Internet Connection!", Toast.LENGTH_SHORT).show();
         }
 
@@ -61,17 +60,19 @@ public class MainActivity extends AppCompatActivity implements IResultView {
         btnSyn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+try{
                 connectionDetector = new ConnectionDetector(context);
                 isinternetConnection = connectionDetector.isInternetOn();
                 if (isinternetConnection) {
                     responseResultList.clear();
                     callApi();
 
-                }else{
+                } else {
                     Toast.makeText(context, "No Internet Connection!", Toast.LENGTH_SHORT).show();
                 }
-
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             }
         });
 
@@ -79,36 +80,38 @@ public class MainActivity extends AppCompatActivity implements IResultView {
     }
 
     private void callApi() {
+        try{
         AuthenticateImpl authenticateImpl = new AuthenticateImpl(context, this);
         authenticateImpl.callAPI();
         dialog.setMessage("Loading, please wait.");
         dialog.show();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
     }
 
 
     @Override
     public void showResult(Object listDO) {
-        final int count=0;
+        try {
         responseResultList = ((ResponseResult) listDO).getResults();
         dialog.dismiss();
         CustomAdapter adapter = new CustomAdapter(this, ((ResponseResult) listDO).getResults());
         recyclerView.setAdapter(adapter);
 
 
-
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                if(count==0) {
-                    Intent intent = new Intent(MainActivity.this, UserDetailActivity.class);
-                    intent.putExtra("name", responseResultList.get(position).getName());
-                    intent.putExtra("height", responseResultList.get(position).getHeight());
-                    intent.putExtra("mass", responseResultList.get(position).getMass());
-                    intent.putExtra("dateNtime", responseResultList.get(position).getCreated());
+                Intent intent = new Intent(MainActivity.this, UserDetailActivity.class);
+                intent.putExtra("name", responseResultList.get(position).getName());
+                intent.putExtra("height", responseResultList.get(position).getHeight());
+                intent.putExtra("mass", responseResultList.get(position).getMass());
+                intent.putExtra("dateNtime", responseResultList.get(position).getCreated());
 
 
-                    startActivity(intent);
-                }
+                startActivity(intent);
+
 
             }
 
@@ -117,18 +120,25 @@ public class MainActivity extends AppCompatActivity implements IResultView {
 
             }
         }));
-
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
     }
 
     @Override
     public void onDisplayMessage(String message) {
-        dialog.dismiss();
-        if (message == null)
-            Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show();
-        else
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        try {
+            dialog.dismiss();
+            if (message == null)
+                Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
-
-
 }

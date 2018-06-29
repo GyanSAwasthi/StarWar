@@ -26,10 +26,14 @@ public class AuthenticateImpl implements INetworkResult {
     private IResultView iResultViewListener;
 
     public AuthenticateImpl(Context context, IResultView iResultView) {
+        try{
         this.context = context;
         this.iResultViewListener = iResultView;
         endPointsAPI = NetworkClient.getClient().create(IEndPointUrl.class);
         networkHandler = new NetworkHandler(this);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
 
     }
 
@@ -49,7 +53,7 @@ public class AuthenticateImpl implements INetworkResult {
     @SuppressWarnings("unchecked")
     @Override
     public void onSuccess(Object responseBody, int responseType) {
-
+try{
        ResponseResult authenticateModel = (ResponseResult) responseBody;
 
         switch (responseType) {
@@ -59,6 +63,9 @@ public class AuthenticateImpl implements INetworkResult {
 
                 break;
         }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
     }
 
 
