@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">StarWar</string>
+    <string name="name">Name :</string>
+    <string name="height">Height (meters) :</string>
+    <string name="mass">Mass (k.g) :</string>
+    <string name="date">Date :</string>
 </resources>

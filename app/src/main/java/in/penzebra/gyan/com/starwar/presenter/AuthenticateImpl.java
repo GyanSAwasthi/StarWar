@@ -25,47 +25,45 @@ public class AuthenticateImpl implements INetworkResult {
     private NetworkHandler networkHandler;
     private IResultView iResultViewListener;
 
-    public AuthenticateImpl(Context context, IResultView iResultView) {
-        try{
-        this.context = context;
-        this.iResultViewListener = iResultView;
-        endPointsAPI = NetworkClient.getClient().create(IEndPointUrl.class);
-        networkHandler = new NetworkHandler(this);
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
+    public AuthenticateImpl(IResultView iResultView) {
+        try {
+            // this.context = context;
+            this.iResultViewListener = iResultView;
+            endPointsAPI = NetworkClient.getClient().create(IEndPointUrl.class);
+            networkHandler = new NetworkHandler(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
-
 
 
     @SuppressWarnings("unchecked")
-    public void callAPI() {
+    public void callAPI(int currentpage) {
 
-        Call authenticateResponseCall = endPointsAPI.getUserList();
+        Call authenticateResponseCall = endPointsAPI.getUserList(currentpage);
         authenticateResponseCall.enqueue(networkHandler.EnqueueRequest(NetworkConstants.RESPONSE_TYPE.RETRIEVE_TYPE));
 
 
     }
 
 
-
     @SuppressWarnings("unchecked")
     @Override
     public void onSuccess(Object responseBody, int responseType) {
-try{
-       ResponseResult authenticateModel = (ResponseResult) responseBody;
+        try {
+            ResponseResult authenticateModel = (ResponseResult) responseBody;
 
-        switch (responseType) {
+            switch (responseType) {
 
-            case NetworkConstants.RESPONSE_TYPE.RETRIEVE_TYPE:
-                iResultViewListener.showResult(responseBody);
+                case NetworkConstants.RESPONSE_TYPE.RETRIEVE_TYPE:
+                    iResultViewListener.showResult(responseBody);
 
-                break;
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
     }
 
 

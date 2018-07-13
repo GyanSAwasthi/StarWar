@@ -1,6 +1,7 @@
 package in.penzebra.gyan.com.starwar.view.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +15,14 @@ import java.util.List;
 import in.penzebra.gyan.com.starwar.R;
 import in.penzebra.gyan.com.starwar.model.ResponseResult;
 import in.penzebra.gyan.com.starwar.view.MainActivity;
+import in.penzebra.gyan.com.starwar.view.UserDetailActivity;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
 
+    private Context ctx;
     private ArrayList<ResponseResult.Result> dataSet;
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    public  class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView textViewName;
         TextView textViewVersion;
@@ -29,11 +32,25 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             super(itemView);
             this.textViewName = (TextView) itemView.findViewById(R.id.textViewName);
 
+            textViewName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(ctx, UserDetailActivity.class);
+                    intent.putExtra("name", dataSet.get(getAdapterPosition()).getName());
+                    intent.putExtra("height", dataSet.get(getAdapterPosition()).getHeight());
+                    intent.putExtra("mass", dataSet.get(getAdapterPosition()).getMass());
+                    intent.putExtra("dateNtime", dataSet.get(getAdapterPosition()).getCreated());
+                    ctx.startActivity(intent);
+
+                }
+            });
+
         }
     }
 
 
     public CustomAdapter(Context ctx, ArrayList<ResponseResult.Result> data) {
+        this.ctx = ctx;
         this.dataSet = data;
     }
 

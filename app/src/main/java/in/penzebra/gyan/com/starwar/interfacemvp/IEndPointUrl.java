@@ -23,5 +23,5 @@ public interface IEndPointUrl {
 
     @GET("people/")
     @Headers({"Content-Type: application/json"})
-    Call<ResponseResult> getUserList();
+    Call<ResponseResult> getUserList(@Query("page") int pageNo);
 }
